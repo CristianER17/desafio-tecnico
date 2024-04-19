@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/CristianER17/desafio-tecnico/issues"
   },
-  "homepage": "https://github.com/CristianER17/desafio-tecnico#readme"
+  "homepage": "https://github.com/CristianER17/desafio-tecnico#readme",
+  "dependencies": {
+    "formik": "^2.4.5"
+  }
 }
