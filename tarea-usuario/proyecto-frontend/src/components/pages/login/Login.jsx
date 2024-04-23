@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Importa Link de React Router
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Typography, TextField, Grid, Button, Link as MuiLink } from '@mui/material';
 import { useFormik } from 'formik';
 import { basicSchemaLogin } from '../../../schemas';
@@ -9,52 +9,36 @@ import LockIcon from '@mui/icons-material/Lock';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import "./Login.css";
 
-/*const loginAccount = async (values, actions) => {
-    values.registered = true;
-    localStorage.setItem('usuario', JSON.stringify(values));
-    console.log(values);
-    console.log(JSON.parse(localStorage.getItem('usuario')));
-    actions.resetForm(); // Reiniciar el formulario después del envío si es necesario
-};*/
+// Se importan componentes, schemas, iconos de MUI y el Login.css
 
-const Login = ( ) => {
-
-    const usuariosRegistrados = JSON.parse(localStorage.getItem('cuentas-registradas')) || [];
-    console.log(usuariosRegistrados)
-
+const Login = () => {
     const navigate = useNavigate();
 
-    const handleSubmit = async (values, actions) => {
-        values.registered = true;
-        localStorage.setItem('usuario', JSON.stringify(values));
-        console.log(values);
+    const handleSubmit = async (values, actions) => { // Funcion llamada al enviar formulario de login
+        localStorage.setItem('usuario', JSON.stringify(values)); // se setea del localStorage el usuario
+        const usuariosRegistrados = JSON.parse(localStorage.getItem('cuentas-registradas')) || []; // se obtiene las cuentas registradas del localStorage
+        const usuario = usuariosRegistrados.find(user => (user.nombre === values.nombre || user.email === values.email) && user.contraseña === values.contraseña); // si se encuentra el usuario dentro del localStorage de cuentas registradas
 
-        const usuariosRegistrados = JSON.parse(localStorage.getItem('cuentas-registradas')) || [];
-        const usuario = usuariosRegistrados.find(user => (user.nombre === values.nombre || user.email === values.email) && user.contraseña === values.contraseña);
-
-        if (usuario) {
-            console.log(JSON.parse(localStorage.getItem('usuario')));
-
-            // Usuario válido, haz lo que necesites aquí (por ejemplo, redirigir a la página de inicio)
-            actions.resetForm(); // Reiniciar el formulario después del envío si es necesario
-            navigate('/home'); // Activar la redirección a '/home'
+        if (usuario) { // Se verifica si el usuario existe registrado
+            actions.resetForm(); // resetear formulario
+            navigate('/home'); // navegar a ruta home
         } else {
-            console.log(usuario)
-            setError('Usuario o contraseña incorrectos');
+            setError('Usuario o contraseña incorrectos'); // mostrar error del login
         }
 
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // temporizador breve despues del login
     };
-    const {
-        handleChange,
-        handleBlur,
-        handleSubmit: handleFormSubmit,
-        values,
-        errors,
-        touched,
-        isSubmitting
-    } = useFormik({
+
+    // Se separa el uso de formik en las funcionalidades necesarias
+    const { 
+        handleChange, // cuando existe un cambio
+        handleBlur, // cuando un campo de texto es tocado
+        handleSubmit: handleFormSubmit, // envio de formulario para login
+        values, // guarda los datos del login
+        errors, // guarda en caso de haber los errores (se utiliza la libreria de Yup para validar errores)
+        touched, // Si un campo de texto es editado
+        isSubmitting // cuando el formulario esta en estado de envio de formulario
+    } = useFormik({ // valores iniciales
         initialValues: {
             nombre: "",
             email: "",
@@ -62,11 +46,11 @@ const Login = ( ) => {
             contraseñaRepetida: "",
             registered: false
         },
-        validationSchema: basicSchemaLogin,
-        onSubmit: handleSubmit
+        validationSchema: basicSchemaLogin, // nombre del schema para validaciones con Yup
+        onSubmit: handleSubmit // submit para validar los datos enviados
     });
 
-    
+    // Contenedor que es visualizado en el front-end para el login
     return (
         <div>
             <form
@@ -98,15 +82,13 @@ const Login = ( ) => {
                         md={9}
                         fontFamily={"Helvetica"}
                         fontSize={"20px"}
-                        
-                        
                     >
                        <Typography 
                             variant="body1" 
                             component="div" 
                             sx={{ 
                                 flexGrow: 1, 
-                                margin: { xs: '2.5px 0', md: '2.5px 0' }, // Margen vertical ajustado para dispositivos móviles y escritorio
+                                margin: { xs: '2.5px 0', md: '2.5px 0' },
                                 fontSize: { xs: '1.5rem', md: '2rem' } 
                             }}
                         >
@@ -120,9 +102,8 @@ const Login = ( ) => {
                                         mr: 2, 
                                         fontSize:"30px",
                                         marginBottom:"9px" 
-                                    }} // Agrega margen a la derecha para separar el icono del texto
+                                    }}
                                 /> 
-                                {/* Agrega el nombre de usuario */}
                                 Nombre de usuario
                             </Box>
                         </Typography>
@@ -153,7 +134,7 @@ const Login = ( ) => {
                             component="div" 
                             sx={{ 
                                 flexGrow: 1, 
-                                margin: { xs: '2.5px 0', md: '2.5px 0' }, // Margen vertical ajustado para dispositivos móviles y escritorio
+                                margin: { xs: '2.5px 0', md: '2.5px 0' },
                                 fontSize: { xs: '1.5rem', md: '2rem' } 
                             }}
                         >
@@ -167,9 +148,8 @@ const Login = ( ) => {
                                         mr: 2, 
                                         fontSize:"30px",
                                         marginBottom:"9px" 
-                                    }} // Agrega margen a la derecha para separar el icono del texto
+                                    }}
                                 /> 
-                                {/* Agrega el nombre de usuario */}
                                 Contraseña
                             </Box>
                         </Typography>
@@ -187,7 +167,6 @@ const Login = ( ) => {
                             helperText={touched.contraseña && !!errors.contraseña ? errors.contraseña : ""}
                         />
                     </Grid>
-                    
                 </Grid>
                 <Grid 
                     item 
@@ -195,7 +174,7 @@ const Login = ( ) => {
                     md={9}
                     marginBottom={"20px"}
                     marginTop={"15px"}
-                    >    
+                >    
                     <Typography 
                         variant="body2">
                         ¿Olvidaste tu contraseña?{' '}
@@ -205,14 +184,13 @@ const Login = ( ) => {
                             Recuperar contraseña
                         </MuiLink>
                     </Typography>
-                    
                 </Grid>
                 
                 <Button
                     type="submit"
                     variant="contained"
                     sx={{ marginTop: "30px", marginBottom: "30px" }}
-                    disabled={isSubmitting} // Deshabilitar el botón durante el envío del formulario
+                    disabled={isSubmitting}
                 >
                     Confirmar
                 </Button>
@@ -221,7 +199,7 @@ const Login = ( ) => {
                     xs={12} 
                     md={9}
                     marginBottom={"20px"}
-                    >    
+                >    
                     <Typography 
                         variant="body2">
                         ¿Eres nuevo en el sitio web?{' '}
@@ -231,7 +209,6 @@ const Login = ( ) => {
                             Regístrate aquí
                         </MuiLink>
                     </Typography>
-                    
                 </Grid>
             </form>
         </div>

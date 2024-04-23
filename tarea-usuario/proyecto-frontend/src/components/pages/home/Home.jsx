@@ -1,44 +1,40 @@
 import React from 'react';
-import { Typography, Grid, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-
+import { Typography, Grid, Button } from '@mui/material'; // Se importan los componentes de MUI
+import { useNavigate } from 'react-router-dom'; // Se importa el hook useNavigate de react-router-dom
 
 const Home = () => {
-  // Verifica si el usuario ha iniciado sesión consultando localStorage
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // se prepara el hook en la const navigate
 
-  const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
-  console.log(usuarioGuardado)
+  const usuarioGuardado = JSON.parse(localStorage.getItem('usuario')); // se obtiene el usuario guardado a partir de un login
 
-  // Función para cerrar sesión
+  // funcion para moverse del home al login cuando se cierre sesion
   const handleLogout = () => {
-    // Actualiza el estado de 'registered' a falso
     if (usuarioGuardado) {
-      usuarioGuardado.registered = false;
+      usuarioGuardado.registered = false; 
       localStorage.setItem('usuario', JSON.stringify(usuarioGuardado));
-      navigate('/'); // Activar la redirección a '/home'
-
+      navigate('/'); // se mueve a la ruta login especificado por "/"
     }
-    // Redirecciona a la página de inicio de sesión u otra página después de cerrar sesión
-    // Aquí puedes usar useHistory de react-router-dom para redirigir a la página deseada
-    // Ejemplo: history.push('/login');
   };
 
   return (
-    <Grid
+    <Grid // grid contenedor padre
       container
       alignItems="center"
-      justifyContent="center" // Centra horizontalmente
+      justifyContent="center"
       spacing={2}
-      sx={{ height: "100vh" }} // Ajusta la altura para centrar verticalmente
+      sx={{ height: "100vh" }}
     >
-      <Grid item xs={12} md={9} textAlign="center">
+      <Grid // si el usuario guardado existe y esta registrado muestra un mensaje de bienvenida en caso contrario un mensaje de incitar a iniciar sesión
+        item 
+        xs={12} 
+        md={9} 
+        textAlign="center">
         {usuarioGuardado && usuarioGuardado.registered ? (
           <Typography
             variant="h3"
             color="#1976d2"
             fontFamily="Helvetica"
-            mb={2} // Ajusta el margen inferior
+            mb={2}
           >
             ¡Bienvenido, {usuarioGuardado.nombre}!
           </Typography>
@@ -47,7 +43,7 @@ const Home = () => {
             variant="h4"
             color="error"
             fontFamily="Helvetica"
-            mb={2} // Ajusta el margen inferior
+            mb={2}
           >
             Aún no has iniciado sesión
           </Typography>
@@ -56,8 +52,8 @@ const Home = () => {
         <Button
           type="submit"
           variant="contained"
-          sx={{ marginTop: "10px" }} // Ajusta el margen superior
-          onClick={usuarioGuardado && usuarioGuardado.registered ? handleLogout : () => navigate('/')} // Maneja el clic del botón "Cerrar sesión" o "Iniciar sesión"
+          sx={{ marginTop: "10px" }}
+          onClick={usuarioGuardado && usuarioGuardado.registered ? handleLogout : () => navigate('/')}
         >
           {usuarioGuardado && usuarioGuardado.registered ? "Cerrar sesión" : "Iniciar sesión"}
         </Button>

@@ -13,45 +13,27 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import MenuItem from '@mui/material/MenuItem';
 import QuestionAnswerOutlinedIcon from '@mui/icons-material/QuestionAnswerOutlined';
 import QuestionMarkOutlinedIcon from '@mui/icons-material/QuestionMarkOutlined';
-
+// importan componentes, hooks, iconos, schemas y css
 
 
 const registerForm = async (values, actions) => {
-    console.log("registrado");
-    console.log(values.nombre);
-    const userId = uuidv4();
-
-    // Obtener los datos de usuario almacenados en el localStorage
+    const userId = uuidv4();     // se utiliza uuid para creacion de identificadores aleatorios unicos para los registros de usuarios
     const usuariosRegistrados = JSON.parse(localStorage.getItem('cuentas-registradas')) || [];
-
-    // Verificar si algún usuario registrado tiene el mismo nombre que el usuario que está tratando de registrarse
     const usuarioExistente = usuariosRegistrados.find(usuario => usuario.nombre === values.nombre);
 
-    if (usuarioExistente) {
-        console.log("usuario existe");
-        setError('Usuario ya existe'); // Mostrar un mensaje de error si el nombre de usuario ya está registrado
-    } else {
-        // Si el nombre de usuario no está registrado, agregar el nuevo usuario al almacenamiento local
+    if (usuarioExistente) { // si existe una cuenta con el nombre de usuario ya registrado lanza un error
+        setError('Usuario ya existe');
+    } else { // caso contrario se crea el nuevo usuario
         values.id = userId;
-        
-        //console.log(values.id)
         const nuevoUsuario = { ...values };
         usuariosRegistrados.push(nuevoUsuario);
-        console.log(usuariosRegistrados);
         localStorage.setItem('cuentas-registradas', JSON.stringify(usuariosRegistrados));
         actions.resetForm();
-        // setUser(newUser);
-        // setError('');
     }
-
-    
-
 };
-const Register = ( ) => {
-    
-    // funcion para visualizar la data del registro por consola
-    
-    
+
+const Register = () => {
+    // para abrir y cerrar un dialogo de informacion al momento de registrarse correctamente o incorrectamente
     const [open, setOpen] = React.useState(false)
 
     const handleClickOpen = () => {
@@ -62,19 +44,17 @@ const Register = ( ) => {
         setOpen(false)
     }
 
-        
     const { 
-            handleChange, 
-            handleBlur, 
-            handleSubmit, 
-            values, 
-            errors, 
-            touched, 
-            isSubmitting, 
-            isValid 
-        } = useFormik({
-        // valores inciales de los inputs para el registro
-        initialValues:{
+        handleChange, 
+        handleBlur, 
+        handleSubmit, 
+        values, 
+        errors, 
+        touched, 
+        isSubmitting, 
+        isValid 
+    } = useFormik({
+        initialValues:{ // valores inciales de un registro de un usuario
             id: "",
             nombre: "",
             email: "",
@@ -85,11 +65,10 @@ const Register = ( ) => {
             terminosYCondiciones: false,
             registered: false
         },
-        // uso de la libreria Yup para validar el ingreso de los inputs del registro
         validationSchema: basicSchemaRegister,
         onSubmit: registerForm
-        })
-        // funcion que se activa cuando se clickea el boton de registrarse
+    })
+    // Los TextFields tienen el atributo de error para verificar con Yup el correcto ingreso de los datos
     return (
         <div>
             <form 
@@ -100,7 +79,6 @@ const Register = ( ) => {
                     alignItems={"center"} 
                     justifyContent={'space-evenly'} 
                     spacing={2}
-                    
                     sx={{width:"100%"}}>
                     
                     <Grid 
@@ -112,7 +90,6 @@ const Register = ( ) => {
                         fontFamily={"Helvetica"} 
                         marginTop={"20px"}
                         fontSize={"28px"}>
-                        
                         Registro de cuenta
                     </Grid>
 
@@ -123,28 +100,24 @@ const Register = ( ) => {
                         fontFamily={"Helvetica"} 
                         fontSize={"20px"} 
                         marginTop={"2%"}>
-                            <Typography 
+                        <Typography 
                             variant="body1" 
                             component="div" 
                             sx={{ 
                                 flexGrow: 1, 
-                                margin: { xs: '2.5px 0', md: '2.5px 0' }, // Margen vertical ajustado para dispositivos móviles y escritorio
+                                margin: { xs: '2.5px 0', md: '2.5px 0' }, 
                                 fontSize: { xs: '1.5rem', md: '2rem' } 
-                            }}
-                        >
+                            }}>
                             <Box 
                                 display="flex" 
                                 alignItems="center"
-                                fontSize={"20px"}
-                            >
+                                fontSize={"20px"}>
                                 <AccountBoxIcon 
                                     sx={{ 
                                         mr: 2, 
                                         fontSize:"30px",
                                         marginBottom:"9px" 
-                                    }} // Agrega margen a la derecha para separar el icono del texto
-                                /> 
-                                {/* Agrega el nombre de usuario */}
+                                    }} /> 
                                 Nombre de usuario
                             </Box>
                         </Typography>
@@ -156,14 +129,12 @@ const Register = ( ) => {
                             variant="outlined"
                             margin='dense'
                             fullWidth
-                            
                             onChange={handleChange}
                             onBlur={handleBlur}
-
                             value={values.nombre}
                             error={touched.nombre && !!errors.nombre ? errors.nombre : ""}
                             helperText={touched.nombre && !!errors.nombre ? errors.nombre : ""}
-                            />
+                        />
                         
                     </Grid>
 
@@ -173,28 +144,24 @@ const Register = ( ) => {
                         md={9} 
                         fontFamily={"Helvetica"} 
                         fontSize={"20px"}>
-                            <Typography 
+                        <Typography 
                             variant="body1" 
                             component="div" 
                             sx={{ 
                                 flexGrow: 1, 
-                                margin: { xs: '2.5px 0', md: '2.5px 0' }, // Margen vertical ajustado para dispositivos móviles y escritorio
+                                margin: { xs: '2.5px 0', md: '2.5px 0' }, 
                                 fontSize: { xs: '1.5rem', md: '2rem' } 
-                            }}
-                        >
+                            }}>
                             <Box 
                                 display="flex" 
                                 alignItems="center"
-                                fontSize={"20px"}
-                            >
+                                fontSize={"20px"}>
                                 <EmailIcon 
                                     sx={{ 
                                         mr: 2, 
                                         fontSize:"30px",
                                         marginBottom:"9px" 
-                                    }} // Agrega margen a la derecha para separar el icono del texto
-                                /> 
-                                {/* Agrega el nombre de usuario */}
+                                    }} />
                                 Email
                             </Box>
                         </Typography>
@@ -208,11 +175,10 @@ const Register = ( ) => {
                             fullWidth 
                             onChange={handleChange}
                             onBlur={handleBlur}
-
                             value={values.email}
                             error={touched.email && !!errors.email ? errors.email : ""}
                             helperText={touched.email && !!errors.email ? errors.email : ""}
-                            />
+                        />
                     </Grid>
                     <Grid 
                         item 
@@ -225,23 +191,19 @@ const Register = ( ) => {
                             component="div" 
                             sx={{ 
                                 flexGrow: 1, 
-                                margin: { xs: '2.5px 0', md: '2.5px 0' }, // Margen vertical ajustado para dispositivos móviles y escritorio
+                                margin: { xs: '2.5px 0', md: '2.5px 0' }, 
                                 fontSize: { xs: '1.5rem', md: '2rem' } 
-                            }}
-                        >
+                            }}>
                             <Box 
                                 display="flex" 
                                 alignItems="center"
-                                fontSize={"20px"}
-                            >
+                                fontSize={"20px"}>
                                 <LockIcon 
                                     sx={{ 
                                         mr: 2, 
                                         fontSize:"30px",
                                         marginBottom:"9px" 
-                                    }} // Agrega margen a la derecha para separar el icono del texto
-                                /> 
-                                {/* Agrega el nombre de usuario */}
+                                    }} /> 
                                 Contraseña
                             </Box>
                         </Typography>
@@ -255,11 +217,10 @@ const Register = ( ) => {
                             fullWidth 
                             onChange={handleChange}
                             onBlur={handleBlur}
-
                             value={values.contraseña}
                             error={touched.contraseña && !!errors.contraseña ? errors.contraseña : ""}
                             helperText={touched.contraseña && !!errors.contraseña ? errors.contraseña : ""}
-                            />
+                        />
                     </Grid>
                     <Grid 
                         item 
@@ -268,30 +229,26 @@ const Register = ( ) => {
                         fontFamily={"Helvetica"} 
                         fontSize={"20px"}> 
                         <Typography 
-                        variant="body1" 
-                        component="div" 
-                        sx={{ 
-                            flexGrow: 1, 
-                            margin: { xs: '2.5px 0', md: '2.5px 0' }, // Margen vertical ajustado para dispositivos móviles y escritorio
-                            fontSize: { xs: '1.5rem', md: '2rem' } 
-                        }}
-                    >
-                        <Box 
-                            display="flex" 
-                            alignItems="center"
-                            fontSize={"20px"}
-                        >
-                            <LockOutlinedIcon 
-                                sx={{ 
-                                    mr: 2, 
-                                    fontSize:"30px",
-                                    marginBottom:"9px" 
-                                }} // Agrega margen a la derecha para separar el icono del texto
-                            /> 
-                            {/* Agrega el nombre de usuario */}
-                            Confirmar contraseña
-                        </Box>
-                    </Typography>
+                            variant="body1"
+                            component="div" 
+                            sx={{ 
+                                flexGrow: 1, 
+                                margin: { xs: '2.5px 0', md: '2.5px 0' }, 
+                                fontSize: { xs: '1.5rem', md: '2rem' } 
+                            }}>
+                            <Box 
+                                display="flex" 
+                                alignItems="center"
+                                fontSize={"20px"}>
+                                <LockOutlinedIcon 
+                                    sx={{ 
+                                        mr: 2, 
+                                        fontSize:"30px",
+                                        marginBottom:"9px" 
+                                    }} /> 
+                                Confirmar contraseña
+                            </Box>
+                        </Typography>
 
                         <TextField 
                             type='password' 
@@ -302,11 +259,10 @@ const Register = ( ) => {
                             fullWidth 
                             onChange={handleChange}
                             onBlur={handleBlur}
-
                             value={values.contraseñaRepetida}
                             error={touched.contraseñaRepetida && !!errors.contraseñaRepetida? errors.contraseñaRepetida : ""}
                             helperText={touched.contraseñaRepetida && !!errors.contraseñaRepetida ? errors.contraseñaRepetida : ""}
-                            />
+                        />
                     </Grid>
                     <Grid item xs={11} md={9} fontFamily={"Helvetica"} fontSize={"20px"}>
                         <Typography variant="body1" component="div" sx={{ flexGrow: 1, margin: { xs: '2.5px 0', md: '2.5px 0' }, fontSize: { xs: '1.5rem', md: '2rem' } }}>
@@ -335,7 +291,7 @@ const Register = ( ) => {
                             <MenuItem value="¿Cuál es tu comida favorita?">¿Cuál es tu comida favorita?</MenuItem>
                         </TextField>
                     </Grid>
-                        <Grid 
+                    <Grid 
                         item 
                         xs={11} 
                         md={9} 
@@ -375,17 +331,8 @@ const Register = ( ) => {
                             error={touched.respuestaSeguridad && !!errors.respuestaSeguridad ? errors.respuestaSeguridad : ""}
                             helperText={touched.respuestaSeguridad && !!errors.respuestaSeguridad ? errors.respuestaSeguridad : ""}
                         />
-                
                     </Grid>
-
-                   
                 </Grid>
-                
-
-
-
-                    
-                
                 <FormControlLabel
                     control={
                         <Checkbox
@@ -397,14 +344,13 @@ const Register = ( ) => {
                     label="Acepto los términos y condiciones"
                 />
 
-                {/* Mensaje de error para el checkbox */}
                 {touched.terminosYCondiciones && errors.terminosYCondiciones && (
                     <div style={{ 
                         color: 'red', 
                         fontFamily: 'Helvetica', 
                         fontSize: '14px', 
-                        marginTop: '8px' }}
-                        >{errors.terminosYCondiciones}
+                        marginTop: '8px' }}>
+                        {errors.terminosYCondiciones}
                     </div>
                 )}
                 <Button
@@ -435,10 +381,10 @@ const Register = ( ) => {
                     aria-describedby="alert-dialog-description"
                     fontFamily={"Helvetica"}
                 > 
-                    <DialogTitle 
+                    <DialogTitle // si es valido el registro muestra mensaje de exito caso contrario de error
                         id="alert-dialog-title"
                         sx={{marginTop: "5px"}}
-                        >
+                        > 
                             {isValid ? 'Registro completado con éxito' : 'Fallo en el registro de la cuenta'}
                     </DialogTitle>
                     
@@ -451,7 +397,6 @@ const Register = ( ) => {
                         </Button>
                     </DialogActions>
                 </Dialog>
-                    
             </form>
         </div>
     )
