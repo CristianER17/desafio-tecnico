@@ -15,6 +15,7 @@ const Login = () => {
     const navigate = useNavigate();
 
     const handleSubmit = async (values, actions) => { // Funcion llamada al enviar formulario de login
+        values.registered = true // Cambia el estado de registrado a verdadero
         localStorage.setItem('usuario', JSON.stringify(values)); // se setea del localStorage el usuario
         const usuariosRegistrados = JSON.parse(localStorage.getItem('cuentas-registradas')) || []; // se obtiene las cuentas registradas del localStorage
         const usuario = usuariosRegistrados.find(user => (user.nombre === values.nombre || user.email === values.email) && user.contraseña === values.contraseña); // si se encuentra el usuario dentro del localStorage de cuentas registradas
